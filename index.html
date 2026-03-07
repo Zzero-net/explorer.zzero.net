@@ -67,7 +67,7 @@ body::after {
 a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--green); }
 
-/* ── DEMO watermark ── */
+/* ── DEVNET watermark ── */
 .demo-watermark {
   position: fixed;
   bottom: 20px;
@@ -437,7 +437,7 @@ nav {
 /* ── Validators ── */
 .validator-item {
   display: grid;
-  grid-template-columns: 1fr 80px 55px 50px;
+  grid-template-columns: 1fr 80px 50px 55px 50px;
   gap: 8px;
   align-items: center;
   padding: 10px 16px;
@@ -448,6 +448,7 @@ nav {
 .validator-item .vid { color: var(--cyan); }
 .validator-item .stake { color: var(--text); text-align: right; }
 .validator-item .uptime { color: var(--dim); text-align: right; }
+.validator-item .trust { color: var(--cyan); text-align: right; }
 
 .validator-item .vstatus {
   text-align: center;
@@ -462,7 +463,7 @@ nav {
 
 .validator-header {
   display: grid;
-  grid-template-columns: 1fr 80px 55px 50px;
+  grid-template-columns: 1fr 80px 50px 55px 50px;
   gap: 8px;
   padding: 6px 16px;
   font-size: 10px;
@@ -657,7 +658,7 @@ footer a:hover { color: var(--cyan); }
 </head>
 <body>
 
-<div class="demo-watermark">DEMO</div>
+<div class="demo-watermark">DEVNET</div>
 
 <!-- Navigation -->
 <nav>
@@ -678,7 +679,7 @@ footer a:hover { color: var(--cyan); }
   <div class="status-group">
     <div class="status-indicator">
       <div class="status-dot"></div>
-      <span class="demo-badge">DEMO MODE</span>
+      <span class="demo-badge">DEVNET</span>
     </div>
     <span class="meta">Block <span class="val" id="block-counter">8,412,097</span></span>
     <span class="meta">Epoch <span class="val" id="epoch-counter">2,803</span></span>
@@ -699,7 +700,7 @@ footer a:hover { color: var(--cyan); }
       <button id="search-btn">SEARCH</button>
     </div>
     <div class="search-result" id="search-result">
-      Coming soon &mdash; live search will connect when testnet launches. Stay tuned at <a href="https://zzero.net">zzero.net</a>
+      Coming soon &mdash; live search will connect when devnet is publicly accessible. Stay tuned at <a href="https://zzero.net">zzero.net</a>
     </div>
   </div>
 
@@ -732,8 +733,8 @@ footer a:hover { color: var(--cyan); }
     </div>
     <div class="stat-card">
       <div class="label">Validators</div>
-      <div class="value" id="stat-validators">127</div>
-      <div class="sub">124 online</div>
+      <div class="value" id="stat-validators">3<span class="unit">/ 1,024</span></div>
+      <div class="sub">3 online</div>
     </div>
   </div>
 
@@ -771,6 +772,7 @@ footer a:hover { color: var(--cyan); }
         <div class="validator-header">
           <span>ID</span>
           <span style="text-align:right">Stake</span>
+          <span style="text-align:right">Trust</span>
           <span style="text-align:right">Uptime</span>
           <span style="text-align:center">Status</span>
         </div>
@@ -817,7 +819,7 @@ footer a:hover { color: var(--cyan); }
 </div>
 
 <footer>
-  ZERO Network Explorer &middot; Demo Mode &middot; Pre-testnet simulation &middot;
+  ZERO Network Explorer &middot; Devnet &middot; 3-validator network &middot;
   <a href="https://zzero.net">zzero.net</a>
 </footer>
 
@@ -967,12 +969,13 @@ footer a:hover { color: var(--cyan); }
 
   // ── Validators ──
   const validators = [];
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 3; i++) {
     validators.push({
       id: 'zv_' + hexStr(12),
       stake: randInt(50000, 500000),
       uptime: (99 + Math.random() * 0.99).toFixed(2),
-      online: Math.random() > 0.1,
+      online: true,
+      trust: (0.85 + Math.random() * 0.15).toFixed(3),
       earnings: randInt(100, 5000)
     });
   }
@@ -986,6 +989,7 @@ footer a:hover { color: var(--cyan); }
       el.innerHTML = `
         <span class="vid" title="${v.id}">${v.id.slice(0, 9)}...${v.id.slice(-3)}</span>
         <span class="stake">${fmt(v.stake)} Z</span>
+        <span class="trust">${v.trust}</span>
         <span class="uptime">${v.uptime}%</span>
         <span class="vstatus ${v.online ? 'online' : 'offline'}">${v.online ? 'ON' : 'OFF'}</span>
       `;
@@ -999,8 +1003,8 @@ footer a:hover { color: var(--cyan); }
     const v = pick(validators);
     v.stake += randInt(-1000, 2000);
     v.stake = Math.max(10000, v.stake);
+    v.trust = Math.max(0.800, Math.min(1.000, parseFloat(v.trust) + (Math.random() - 0.45) * 0.01)).toFixed(3);
     v.earnings += randInt(1, 20);
-    if (Math.random() < 0.02) v.online = !v.online;
     renderValidators();
   }, 5000);
 
