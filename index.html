@@ -628,6 +628,130 @@ nav {
 .account-tx-item .atx-amount { color: var(--green); }
 .account-tx-item .atx-time { color: var(--dim); }
 
+/* ── Bridge Events ── */
+.bridge-list {
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.bridge-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(26,26,26,0.6);
+  font-size: 12px;
+  animation: tx-fade-in 0.4s ease-out;
+  transition: background 0.15s;
+}
+.bridge-item:hover { background: rgba(0,255,65,0.02); }
+
+.bridge-item .bridge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bridge-item .bridge-type {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.bridge-type.mint {
+  color: var(--green);
+  background: rgba(0,255,65,0.08);
+}
+.bridge-type.deposit {
+  color: var(--cyan);
+  background: rgba(0,212,255,0.08);
+}
+
+.bridge-item .bridge-chain {
+  font-size: 10px;
+  color: var(--amber);
+  letter-spacing: 1px;
+}
+
+.bridge-item .bridge-amount {
+  color: var(--green);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.bridge-item .bridge-detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.bridge-item .bridge-addr {
+  color: var(--dim);
+  cursor: pointer;
+}
+.bridge-item .bridge-addr:hover { color: var(--cyan); }
+
+.bridge-item .bridge-tx {
+  color: var(--dim);
+  font-size: 10px;
+}
+
+.bridge-item .bridge-time {
+  color: var(--dim);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.bridge-item .bridge-status-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.bridge-status-badge.confirmed {
+  color: var(--green);
+  background: rgba(0,255,65,0.08);
+}
+.bridge-status-badge.pending {
+  color: var(--amber);
+  background: rgba(255,176,0,0.08);
+}
+
+.bridge-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.bridge-header-row .live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+
+.bridge-header-row .live-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
 /* ── Footer ── */
 footer {
   text-align: center;
@@ -748,6 +872,11 @@ footer a:hover { color: var(--cyan); }
       <div class="value" id="stat-validators">3<span class="unit">/ 3</span></div>
       <div class="sub">3 online</div>
     </div>
+    <div class="stat-card">
+      <div class="label">Bridge Volume</div>
+      <div class="value" id="stat-bridge">0<span class="unit">Z</span></div>
+      <div class="sub" id="stat-bridge-sub">0 operations</div>
+    </div>
   </div>
 
   <!-- Main grid: Transactions + Side panels -->
@@ -797,6 +926,17 @@ footer a:hover { color: var(--cyan); }
           <h3>Network Health</h3>
         </div>
         <div class="health-grid" id="health-grid"></div>
+      </div>
+
+      <!-- Bridge Events -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="bridge-header-row">
+            <h3>Bridge Events</h3>
+            <span class="live-dot">LIVE</span>
+          </div>
+        </div>
+        <div class="bridge-list" id="bridge-list"></div>
       </div>
 
     </div>
@@ -1140,6 +1280,143 @@ footer a:hover { color: var(--cyan); }
   // ── Update time display for existing tx items ──
   setInterval(() => {
     txList.querySelectorAll('.tx-item .time').forEach(el => {
+      const text = el.textContent;
+      const match = text.match(/^(\d+)s ago$/);
+      if (match) {
+        const s = parseInt(match[1]) + 1;
+        el.textContent = s < 60 ? s + 's ago' : Math.floor(s / 60) + 'm ago';
+      }
+    });
+  }, 1000);
+
+  // ── Bridge Events ──
+  const bridgeList = document.getElementById('bridge-list');
+  const MAX_BRIDGE = 20;
+  let bridgeVolume = 0;
+  let bridgeOps = 0;
+  const chains = ['Base', 'Arbitrum'];
+  const tokens = { 'Base': 'USDC', 'Arbitrum': 'USDC' };
+
+  // Bridge amounts: realistic deposit sizes (in Z, where 1 USDC = 100 Z)
+  const bridgeAmounts = [
+    100, 100, 200, 250, 500, 500, 1000, 1000,
+    2000, 2500, 5000, 5000, 10000, 15000, 25000
+  ];
+
+  function genBridgeEvent() {
+    const chain = pick(chains);
+    const token = tokens[chain];
+    const amount = pick(bridgeAmounts);
+    const amountZ = amount;
+    const amountUSD = (amount * 0.01).toFixed(2);
+    const recipient = pick(addrPool);
+    const sourceTx = '0x' + hexStr(64);
+    const bridgeId = 'zb_' + hexStr(16);
+    // Events come in pairs: deposit detected, then mint processed
+    // We'll show the combined event
+    const isDeposit = Math.random() > 0.3; // 70% deposits (mints), 30% will show as deposit detection
+    return {
+      type: isDeposit ? 'deposit' : 'mint',
+      chain,
+      token,
+      amount: amountZ,
+      amountUSD,
+      recipient,
+      sourceTx,
+      bridgeId,
+      time: Date.now(),
+      attestations: isDeposit ? randInt(0, 2) : (Math.random() > 0.1 ? 2 : 3),
+      status: isDeposit ? (Math.random() > 0.3 ? 'confirmed' : 'pending') : 'confirmed',
+    };
+  }
+
+  function renderBridgeEvent(evt) {
+    const el = document.createElement('div');
+    el.className = 'bridge-item';
+
+    const ago = Math.max(0, Math.floor((Date.now() - evt.time) / 1000));
+    const agoStr = ago < 60 ? ago + 's ago' : Math.floor(ago / 60) + 'm ago';
+
+    const typeLabel = evt.type === 'deposit' ? 'DEPOSIT' : 'MINT';
+    const typeClass = evt.type === 'deposit' ? 'deposit' : 'mint';
+    const statusClass = evt.status === 'confirmed' ? 'confirmed' : 'pending';
+    const statusLabel = evt.status === 'confirmed'
+      ? (evt.type === 'mint' ? 'MINTED' : 'CONFIRMED')
+      : 'PENDING';
+
+    el.innerHTML = `
+      <div class="bridge-row">
+        <span class="bridge-type ${typeClass}">${typeLabel}</span>
+        <span class="bridge-chain">${evt.chain} ${evt.token}</span>
+        <span class="bridge-amount">${fmt(evt.amount)} Z</span>
+      </div>
+      <div class="bridge-detail">
+        <span class="bridge-addr" data-addr="${evt.recipient}" title="${evt.recipient}">${truncAddr(evt.recipient)}</span>
+        <span class="bridge-status-badge ${statusClass}">${statusLabel} ${evt.attestations}/3</span>
+        <span class="bridge-time">${agoStr}</span>
+      </div>
+    `;
+
+    // Click handler for address
+    el.querySelectorAll('.bridge-addr').forEach(a => {
+      a.addEventListener('click', () => showAccount(a.dataset.addr));
+    });
+
+    return el;
+  }
+
+  function addBridgeEvent() {
+    const evt = genBridgeEvent();
+    const el = renderBridgeEvent(evt);
+    bridgeList.prepend(el);
+    bridgeOps++;
+
+    if (evt.status === 'confirmed') {
+      bridgeVolume += evt.amount;
+    }
+
+    // Remove old items
+    while (bridgeList.children.length > MAX_BRIDGE) {
+      bridgeList.removeChild(bridgeList.lastChild);
+    }
+
+    // Update stats
+    updateBridgeStats();
+  }
+
+  function updateBridgeStats() {
+    document.getElementById('stat-bridge').innerHTML = fmt(bridgeVolume) + '<span class="unit">Z</span>';
+    document.getElementById('stat-bridge-sub').textContent = bridgeOps + ' operations';
+  }
+
+  // Initialize with some bridge events
+  for (let i = 0; i < 6; i++) {
+    const evt = genBridgeEvent();
+    evt.time = Date.now() - randInt(30000, 600000);
+    evt.status = 'confirmed';
+    evt.attestations = Math.random() > 0.2 ? 2 : 3;
+    const el = renderBridgeEvent(evt);
+    bridgeList.appendChild(el);
+    bridgeOps++;
+    bridgeVolume += evt.amount;
+    el.querySelectorAll('.bridge-addr').forEach(a => {
+      a.addEventListener('click', () => showAccount(a.dataset.addr));
+    });
+  }
+  updateBridgeStats();
+
+  // New bridge event every 8-25 seconds (slower than transfers, realistic for bridge)
+  function scheduleBridgeEvent() {
+    setTimeout(() => {
+      addBridgeEvent();
+      scheduleBridgeEvent();
+    }, randInt(8000, 25000));
+  }
+  scheduleBridgeEvent();
+
+  // Update bridge event times
+  setInterval(() => {
+    bridgeList.querySelectorAll('.bridge-time').forEach(el => {
       const text = el.textContent;
       const match = text.match(/^(\d+)s ago$/);
       if (match) {
