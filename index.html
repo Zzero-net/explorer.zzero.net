@@ -681,11 +681,11 @@ footer a:hover { color: var(--cyan); }
       <div class="status-dot"></div>
       <span class="demo-badge">DEVNET</span>
     </div>
-    <span class="meta">Block <span class="val" id="block-counter">8,412,097</span></span>
-    <span class="meta">Epoch <span class="val" id="epoch-counter">2,803</span></span>
+    <span class="meta">Block <span class="val" id="block-counter">3,847</span></span>
+    <span class="meta">Epoch <span class="val" id="epoch-counter">1</span></span>
   </div>
   <div class="status-group">
-    <span class="meta">Uptime <span class="val" id="uptime">127d 14h 32m</span></span>
+    <span class="meta">Uptime <span class="val" id="uptime">0d 2h 14m</span></span>
     <span class="meta">Finality <span class="val" id="finality">247ms</span></span>
   </div>
 </div>
@@ -708,23 +708,23 @@ footer a:hover { color: var(--cyan); }
   <div class="stats-grid">
     <div class="stat-card">
       <div class="label">Total Transactions</div>
-      <div class="value" id="stat-tx">1,247,891,032</div>
-      <div class="sub">+12,847 last hour</div>
+      <div class="value" id="stat-tx">8,241</div>
+      <div class="sub">+47 last minute</div>
     </div>
     <div class="stat-card">
       <div class="label">Throughput</div>
-      <div class="value" id="stat-tps">142,847<span class="unit">TPS</span></div>
-      <div class="sub">Peak: 189,401</div>
+      <div class="value" id="stat-tps">24<span class="unit">TPS</span></div>
+      <div class="sub">Peak: 83</div>
     </div>
     <div class="stat-card">
       <div class="label">Active Accounts</div>
-      <div class="value" id="stat-accounts">2,847,193</div>
-      <div class="sub">+1,204 today</div>
+      <div class="value" id="stat-accounts">37</div>
+      <div class="sub">+4 last hour</div>
     </div>
     <div class="stat-card">
       <div class="label">Total Z Supply</div>
-      <div class="value" id="stat-supply">847,291,000<span class="unit">Z</span></div>
-      <div class="sub">Circulating: 412M</div>
+      <div class="value" id="stat-supply">50,000<span class="unit">Z</span></div>
+      <div class="sub">Circulating: 12,400 Z</div>
     </div>
     <div class="stat-card">
       <div class="label">Avg Finality</div>
@@ -733,7 +733,7 @@ footer a:hover { color: var(--cyan); }
     </div>
     <div class="stat-card">
       <div class="label">Validators</div>
-      <div class="value" id="stat-validators">3<span class="unit">/ 1,024</span></div>
+      <div class="value" id="stat-validators">3<span class="unit">/ 3</span></div>
       <div class="sub">3 online</div>
     </div>
   </div>
@@ -836,10 +836,10 @@ footer a:hover { color: var(--cyan); }
   const fmt = (n) => n.toLocaleString('en-US');
 
   // ── State ──
-  let blockNum = 8412097;
-  let epochNum = 2803;
-  let totalTx = 1247891032;
-  let uptimeSeconds = 127 * 86400 + 14 * 3600 + 32 * 60;
+  let blockNum = 3847;
+  let epochNum = 1;
+  let totalTx = 8241;
+  let uptimeSeconds = 2 * 3600 + 14 * 60;
   const txList = document.getElementById('tx-list');
   const MAX_TX = 50;
 
@@ -849,7 +849,7 @@ footer a:hover { color: var(--cyan); }
   }
 
   // Known addresses pool (for recurring appearances)
-  const addrPool = Array.from({length: 80}, genAddr);
+  const addrPool = Array.from({length: 20}, genAddr);
 
   function truncAddr(a) {
     return a.slice(0, 7) + '...' + a.slice(-4);
@@ -937,19 +937,19 @@ footer a:hover { color: var(--cyan); }
   }, 2000);
 
   setInterval(() => {
-    if (blockNum % 3000 < 3) epochNum++;
+    if (blockNum % 5000 < 3) epochNum++;
     document.getElementById('epoch-counter').textContent = fmt(epochNum);
-  }, 10000);
+  }, 15000);
 
   setInterval(() => {
     document.getElementById('stat-tx').textContent = fmt(totalTx);
   }, 500);
 
   // ── TPS fluctuation ──
-  let tps = 142847;
+  let tps = 24;
   setInterval(() => {
-    tps += randInt(-2000, 2500);
-    tps = Math.max(100000, Math.min(190000, tps));
+    tps += randInt(-5, 7);
+    tps = Math.max(5, Math.min(85, tps));
     document.getElementById('stat-tps').innerHTML = fmt(tps) + '<span class="unit">TPS</span>';
   }, 1500);
 
@@ -974,11 +974,11 @@ footer a:hover { color: var(--cyan); }
   for (let i = 0; i < 3; i++) {
     validators.push({
       id: 'zv_' + hexStr(12),
-      stake: randInt(50000, 500000),
+      stake: randInt(5000, 15000),
       uptime: (99 + Math.random() * 0.99).toFixed(2),
       online: true,
       trust: randInt(850, 1000),
-      earnings: randInt(100, 5000)
+      earnings: randInt(10, 200)
     });
   }
 
@@ -1003,21 +1003,21 @@ footer a:hover { color: var(--cyan); }
   // ── Validators fluctuation ──
   setInterval(() => {
     const v = pick(validators);
-    v.stake += randInt(-1000, 2000);
-    v.stake = Math.max(10000, v.stake);
+    v.stake += randInt(-50, 100);
+    v.stake = Math.max(3000, v.stake);
     v.trust = Math.max(800, Math.min(1000, v.trust + randInt(-2, 3)));
-    v.earnings += randInt(1, 20);
+    v.earnings += randInt(0, 3);
     renderValidators();
   }, 5000);
 
   // ── Network Health ──
   const healthMetrics = [
-    { label: 'DAG Depth', value: 847, max: 1000, color: 'var(--green)' },
-    { label: 'Consensus Rounds', value: 12847, max: 15000, color: 'var(--cyan)' },
-    { label: 'Memory Usage', value: 67, max: 100, color: 'var(--amber)', unit: '%' },
-    { label: 'Storage', value: 42, max: 100, color: 'var(--green)', unit: '%' },
+    { label: 'DAG Depth', value: 47, max: 100, color: 'var(--green)' },
+    { label: 'Consensus Rounds', value: 3847, max: 5000, color: 'var(--cyan)' },
+    { label: 'Memory Usage', value: 23, max: 100, color: 'var(--green)', unit: '%' },
+    { label: 'Storage', value: 2, max: 100, color: 'var(--green)', unit: '%' },
     { label: 'Connected Peers', value: 3, max: 10, color: 'var(--cyan)' },
-    { label: 'Msg Queue', value: 12, max: 100, color: 'var(--green)' },
+    { label: 'Msg Queue', value: 2, max: 100, color: 'var(--green)' },
   ];
 
   function renderHealth() {
@@ -1039,17 +1039,17 @@ footer a:hover { color: var(--cyan); }
   renderHealth();
 
   setInterval(() => {
-    healthMetrics[0].value += randInt(-5, 8);
-    healthMetrics[0].value = Math.max(500, Math.min(999, healthMetrics[0].value));
-    healthMetrics[1].value += randInt(1, 10);
-    healthMetrics[2].value += randInt(-2, 3);
-    healthMetrics[2].value = Math.max(40, Math.min(95, healthMetrics[2].value));
+    healthMetrics[0].value += randInt(-2, 3);
+    healthMetrics[0].value = Math.max(30, Math.min(99, healthMetrics[0].value));
+    healthMetrics[1].value += randInt(1, 5);
+    healthMetrics[2].value += randInt(-1, 2);
+    healthMetrics[2].value = Math.max(18, Math.min(35, healthMetrics[2].value));
     healthMetrics[3].value += randInt(0, 1);
-    healthMetrics[3].value = Math.min(99, healthMetrics[3].value);
-    healthMetrics[4].value += randInt(-3, 4);
-    healthMetrics[4].value = Math.max(180, Math.min(300, healthMetrics[4].value));
-    healthMetrics[5].value += randInt(-5, 6);
-    healthMetrics[5].value = Math.max(0, Math.min(80, healthMetrics[5].value));
+    healthMetrics[3].value = Math.min(10, healthMetrics[3].value);
+    // Peers stay at 2-3 for devnet
+    healthMetrics[4].value = Math.max(2, Math.min(3, healthMetrics[4].value + randInt(-1, 1)));
+    healthMetrics[5].value += randInt(-2, 3);
+    healthMetrics[5].value = Math.max(0, Math.min(8, healthMetrics[5].value));
     renderHealth();
   }, 4000);
 
