@@ -670,7 +670,7 @@ footer a:hover { color: var(--cyan); }
     <a href="https://zzero.net">Main</a>
     <a href="https://docs.zzero.net">Docs</a>
     <a href="https://mcp.zzero.net">MCP</a>
-    <a href="https://github.com/zzeronet" target="_blank">GitHub</a>
+    <a href="https://github.com/Zzero-net" target="_blank">GitHub</a>
   </div>
 </nav>
 
@@ -864,8 +864,10 @@ footer a:hover { color: var(--cyan); }
     const hash = 'zr_' + hexStr(62);
     const from = pick(addrPool);
     const to = pick(addrPool.filter(a => a !== from));
-    const amounts = [0.01, 0.05, 0.10, 0.25, 0.50, 1.00, 2.50, 5.00, 10.00,
-                     25.00, 50.00, 100.00, 250.00, 500.00, 1000.00, 5000.00];
+    // Max transaction: 25 Z ($0.25). Weighted toward small amounts.
+    const amounts = [0.01, 0.01, 0.02, 0.02, 0.03, 0.05, 0.05, 0.05, 0.10, 0.10,
+                     0.10, 0.15, 0.20, 0.25, 0.50, 0.50, 1.00, 1.00, 2.00, 3.00,
+                     5.00, 5.00, 10.00, 15.00, 20.00, 25.00];
     const amount = pick(amounts);
     return { hash, from, to, amount, fee: 0.01, time: Date.now() };
   }
@@ -975,7 +977,7 @@ footer a:hover { color: var(--cyan); }
       stake: randInt(50000, 500000),
       uptime: (99 + Math.random() * 0.99).toFixed(2),
       online: true,
-      trust: (0.85 + Math.random() * 0.15).toFixed(3),
+      trust: randInt(850, 1000),
       earnings: randInt(100, 5000)
     });
   }
@@ -989,7 +991,7 @@ footer a:hover { color: var(--cyan); }
       el.innerHTML = `
         <span class="vid" title="${v.id}">${v.id.slice(0, 9)}...${v.id.slice(-3)}</span>
         <span class="stake">${fmt(v.stake)} Z</span>
-        <span class="trust">${v.trust}</span>
+        <span class="trust">${v.trust}/1000</span>
         <span class="uptime">${v.uptime}%</span>
         <span class="vstatus ${v.online ? 'online' : 'offline'}">${v.online ? 'ON' : 'OFF'}</span>
       `;
@@ -1003,7 +1005,7 @@ footer a:hover { color: var(--cyan); }
     const v = pick(validators);
     v.stake += randInt(-1000, 2000);
     v.stake = Math.max(10000, v.stake);
-    v.trust = Math.max(0.800, Math.min(1.000, parseFloat(v.trust) + (Math.random() - 0.45) * 0.01)).toFixed(3);
+    v.trust = Math.max(800, Math.min(1000, v.trust + randInt(-2, 3)));
     v.earnings += randInt(1, 20);
     renderValidators();
   }, 5000);
@@ -1014,7 +1016,7 @@ footer a:hover { color: var(--cyan); }
     { label: 'Consensus Rounds', value: 12847, max: 15000, color: 'var(--cyan)' },
     { label: 'Memory Usage', value: 67, max: 100, color: 'var(--amber)', unit: '%' },
     { label: 'Storage', value: 42, max: 100, color: 'var(--green)', unit: '%' },
-    { label: 'Connected Peers', value: 247, max: 300, color: 'var(--cyan)' },
+    { label: 'Connected Peers', value: 3, max: 10, color: 'var(--cyan)' },
     { label: 'Msg Queue', value: 12, max: 100, color: 'var(--green)' },
   ];
 
