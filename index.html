@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZERO Network Explorer</title>
-<meta name="description" content="Zero Network Explorer — real-time devnet transactions, validators, and network health.">
+<meta name="description" content="Zero Network Explorer — real-time testnet transactions, validators, and network health.">
 <meta property="og:title" content="Zero Network Explorer">
-<meta property="og:description" content="Real-time devnet transactions, validators, and network health for the Zero microtransaction network.">
+<meta property="og:description" content="Real-time testnet transactions, validators, and network health for the Zero microtransaction network.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://explorer.zzero.net">
 <meta property="og:site_name" content="Zero Network">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zero Network Explorer">
-<meta name="twitter:description" content="Real-time devnet transactions, validators, and network health for the Zero microtransaction network.">
+<meta name="twitter:description" content="Real-time testnet transactions, validators, and network health for the Zero microtransaction network.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -44,7 +44,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Grid background ── */
+/* Grid background */
 body::before {
   content: '';
   position: fixed;
@@ -57,7 +57,7 @@ body::before {
   z-index: 0;
 }
 
-/* ── Scanline overlay ── */
+/* Scanline overlay */
 body::after {
   content: '';
   position: fixed;
@@ -76,7 +76,7 @@ body::after {
 a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--green); }
 
-/* ── TESTNET watermark ── */
+/* TESTNET watermark */
 .demo-watermark {
   position: fixed;
   bottom: 20px;
@@ -91,7 +91,7 @@ a:hover { color: var(--green); }
   user-select: none;
 }
 
-/* ── Navigation ── */
+/* Navigation */
 nav {
   position: sticky;
   top: 0;
@@ -148,7 +148,7 @@ nav {
 }
 .nav-links a:hover { color: var(--green); }
 
-/* ── Top Bar (status) ── */
+/* Top Bar (status) */
 .top-bar {
   background: var(--card);
   border-bottom: 1px solid var(--border);
@@ -182,6 +182,11 @@ nav {
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
+.status-dot.live {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
@@ -201,7 +206,7 @@ nav {
 .top-bar .meta { color: var(--dim); }
 .top-bar .meta .val { color: var(--text); }
 
-/* ── Main container ── */
+/* Main container */
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -210,7 +215,7 @@ nav {
   z-index: 1;
 }
 
-/* ── Search ── */
+/* Search */
 .search-section {
   margin-bottom: 24px;
 }
@@ -256,14 +261,46 @@ nav {
   margin-top: 12px;
   padding: 16px;
   background: var(--card);
-  border: 1px solid rgba(255,176,0,0.2);
+  border: 1px solid rgba(0,212,255,0.2);
   border-radius: 6px;
-  color: var(--amber);
   font-size: 12px;
-  text-align: center;
 }
 
-/* ── Stats Grid ── */
+.search-result.error {
+  border-color: rgba(255,68,68,0.3);
+  color: #ff6666;
+}
+
+.search-result .sr-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 4px;
+}
+
+.search-result .sr-val {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.search-result .sr-val.green { color: var(--green); }
+
+.search-result .sr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.search-result .sr-addr {
+  color: var(--cyan);
+  word-break: break-all;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+/* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -309,7 +346,7 @@ nav {
   margin-top: 4px;
 }
 
-/* ── Section headers ── */
+/* Section headers */
 .section-header {
   display: flex;
   align-items: center;
@@ -343,7 +380,7 @@ nav {
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
-/* ── Layout columns ── */
+/* Layout columns */
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -354,7 +391,7 @@ nav {
   .main-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Transactions ── */
+/* Transactions */
 .tx-panel {
   background: var(--card);
   border: 1px solid var(--border);
@@ -417,7 +454,21 @@ nav {
   background: rgba(15,15,15,0.8);
 }
 
-/* ── Side panels ── */
+.tx-empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--dim);
+  font-size: 12px;
+  line-height: 2;
+}
+.tx-empty .big {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+/* Side panels */
 .side-panels {
   display: flex;
   flex-direction: column;
@@ -443,10 +494,10 @@ nav {
   color: #fff;
 }
 
-/* ── Validators ── */
+/* Validators */
 .validator-item {
   display: grid;
-  grid-template-columns: 1fr 80px 50px 55px 50px;
+  grid-template-columns: 1fr 80px 80px 70px 50px;
   gap: 8px;
   align-items: center;
   padding: 10px 16px;
@@ -455,9 +506,10 @@ nav {
 }
 
 .validator-item .vid { color: var(--cyan); }
+.validator-item .vloc { color: var(--dim); font-size: 10px; }
 .validator-item .stake { color: var(--text); text-align: right; }
+.validator-item .peers { color: var(--dim); text-align: right; }
 .validator-item .uptime { color: var(--dim); text-align: right; }
-.validator-item .trust { color: var(--cyan); text-align: right; }
 
 .validator-item .vstatus {
   text-align: center;
@@ -472,7 +524,7 @@ nav {
 
 .validator-header {
   display: grid;
-  grid-template-columns: 1fr 80px 50px 55px 50px;
+  grid-template-columns: 1fr 80px 80px 70px 50px;
   gap: 8px;
   padding: 6px 16px;
   font-size: 10px;
@@ -482,7 +534,7 @@ nav {
   border-bottom: 1px solid var(--border);
 }
 
-/* ── Network Health ── */
+/* Network Health */
 .health-grid {
   padding: 16px;
   display: grid;
@@ -521,7 +573,7 @@ nav {
   color: var(--text);
 }
 
-/* ── Account detail overlay ── */
+/* Account detail overlay */
 .account-overlay {
   display: none;
   position: fixed;
@@ -627,8 +679,9 @@ nav {
 .account-tx-item .atx-hash { color: var(--cyan); }
 .account-tx-item .atx-amount { color: var(--green); }
 .account-tx-item .atx-time { color: var(--dim); }
+.account-tx-item .atx-dir { color: var(--dim); font-size: 10px; }
 
-/* ── Bridge Events ── */
+/* Bridge Events */
 .bridge-list {
   max-height: 340px;
   overflow-y: auto;
@@ -752,7 +805,14 @@ nav {
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
-/* ── Footer ── */
+.bridge-empty {
+  padding: 20px 16px;
+  text-align: center;
+  color: var(--dim);
+  font-size: 11px;
+}
+
+/* Footer */
 footer {
   text-align: center;
   padding: 32px 24px 20px;
@@ -764,7 +824,7 @@ footer {
 footer a { color: var(--dim); }
 footer a:hover { color: var(--cyan); }
 
-/* ── Responsive ── */
+/* Responsive */
 @media (max-width: 768px) {
   .tx-item, .tx-header { font-size: 11px; grid-template-columns: 100px 1fr 80px 50px; }
   .tx-item .fee, .tx-item .time, .tx-header > :nth-child(3),
@@ -782,11 +842,20 @@ footer a:hover { color: var(--cyan); }
   .top-bar { padding: 8px 12px; }
 }
 
-/* ── Scrollbar ── */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+
+/* WS status indicator */
+.ws-status {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--dim);
+}
+.ws-status.connected { color: var(--green); }
+.ws-status.disconnected { color: #ff4444; }
 </style>
 </head>
 <body>
@@ -814,15 +883,15 @@ footer a:hover { color: var(--cyan); }
 <div class="top-bar">
   <div class="status-group">
     <div class="status-indicator">
-      <div class="status-dot"></div>
+      <div class="status-dot" id="status-dot"></div>
       <span class="demo-badge">TESTNET</span>
     </div>
-    <span class="meta">Block <span class="val" id="block-counter">3,847</span></span>
-    <span class="meta">Epoch <span class="val" id="epoch-counter">1</span></span>
+    <span class="meta">Round <span class="val" id="block-counter">--</span></span>
+    <span class="meta">Epoch <span class="val" id="epoch-counter">--</span></span>
   </div>
   <div class="status-group">
-    <span class="meta">Uptime <span class="val" id="uptime">0d 2h 14m</span></span>
-    <span class="meta">Finality <span class="val" id="finality">247ms</span></span>
+    <span class="meta">Uptime <span class="val" id="uptime">--</span></span>
+    <span class="meta ws-status" id="ws-status">CONNECTING</span>
   </div>
 </div>
 
@@ -832,50 +901,48 @@ footer a:hover { color: var(--cyan); }
   <!-- Search -->
   <div class="search-section">
     <div class="search-box">
-      <input type="text" id="search-input" placeholder="Search by address, transaction hash, or block...">
+      <input type="text" id="search-input" placeholder="Search by public key (64-char hex)...">
       <button id="search-btn">SEARCH</button>
     </div>
-    <div class="search-result" id="search-result">
-      Coming soon &mdash; live search will connect when devnet is publicly accessible. Stay tuned at <a href="https://zzero.net">zzero.net</a>
-    </div>
+    <div class="search-result" id="search-result"></div>
   </div>
 
   <!-- Stats -->
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="label">Total Transactions</div>
-      <div class="value" id="stat-tx">8,241</div>
-      <div class="sub">+47 last minute</div>
+      <div class="label">Finalized Events</div>
+      <div class="value" id="stat-events">--</div>
+      <div class="sub" id="stat-events-sub">across all validators</div>
     </div>
     <div class="stat-card">
-      <div class="label">Throughput</div>
-      <div class="value" id="stat-tps">24<span class="unit">TPS</span></div>
-      <div class="sub">Peak: 83</div>
+      <div class="label">DAG Round</div>
+      <div class="value" id="stat-round">--</div>
+      <div class="sub">consensus round</div>
     </div>
     <div class="stat-card">
       <div class="label">Active Accounts</div>
-      <div class="value" id="stat-accounts">37</div>
-      <div class="sub">+4 last hour</div>
+      <div class="value" id="stat-accounts">--</div>
+      <div class="sub" id="stat-accounts-sub">on-chain</div>
     </div>
     <div class="stat-card">
       <div class="label">Total Z Supply</div>
-      <div class="value" id="stat-supply">50,000<span class="unit">Z</span></div>
-      <div class="sub">Circulating: 12,400 Z</div>
+      <div class="value" id="stat-supply">--<span class="unit">Z</span></div>
+      <div class="sub" id="stat-supply-sub">protocol reserve</div>
     </div>
     <div class="stat-card">
-      <div class="label">Avg Finality</div>
-      <div class="value" id="stat-finality">247<span class="unit">ms</span></div>
-      <div class="sub">99.97% under 500ms</div>
+      <div class="label">Finalized TXs</div>
+      <div class="value" id="stat-txs">--</div>
+      <div class="sub">confirmed transfers</div>
     </div>
     <div class="stat-card">
       <div class="label">Validators</div>
-      <div class="value" id="stat-validators">3<span class="unit">/ 3</span></div>
-      <div class="sub">3 online</div>
+      <div class="value" id="stat-validators">--<span class="unit">/ 3</span></div>
+      <div class="sub" id="stat-validators-sub">online</div>
     </div>
     <div class="stat-card">
-      <div class="label">Bridge Volume</div>
-      <div class="value" id="stat-bridge">0<span class="unit">Z</span></div>
-      <div class="sub" id="stat-bridge-sub">0 operations</div>
+      <div class="label">Total Stake</div>
+      <div class="value" id="stat-stake">--<span class="unit">Z</span></div>
+      <div class="sub" id="stat-stake-sub">staked</div>
     </div>
   </div>
 
@@ -886,7 +953,7 @@ footer a:hover { color: var(--cyan); }
     <div class="tx-panel">
       <div class="panel-header">
         <div class="section-header" style="margin-bottom:0;width:100%">
-          <h2>Recent Transactions</h2>
+          <h2>Recent Transfers</h2>
           <span class="live-dot">LIVE FEED</span>
         </div>
       </div>
@@ -895,11 +962,17 @@ footer a:hover { color: var(--cyan); }
         <span>From</span>
         <span>To</span>
         <span style="text-align:right">Amount</span>
-        <span style="text-align:right">Fee</span>
-        <span style="text-align:right">Time</span>
+        <span style="text-align:right">Nonce</span>
+        <span style="text-align:right">Seq</span>
         <span style="text-align:center">OK</span>
       </div>
-      <div class="tx-list" id="tx-list"></div>
+      <div class="tx-list" id="tx-list">
+        <div class="tx-empty" id="tx-empty">
+          <div class="big">No transfers yet</div>
+          Finalized transfers will appear here in real time.<br>
+          The network is running &mdash; waiting for the first transaction.
+        </div>
+      </div>
     </div>
 
     <!-- Side panels -->
@@ -911,9 +984,9 @@ footer a:hover { color: var(--cyan); }
           <h3>Validators</h3>
         </div>
         <div class="validator-header">
-          <span>ID</span>
+          <span>Node</span>
           <span style="text-align:right">Stake</span>
-          <span style="text-align:right">Trust</span>
+          <span style="text-align:right">Peers</span>
           <span style="text-align:right">Uptime</span>
           <span style="text-align:center">Status</span>
         </div>
@@ -936,7 +1009,9 @@ footer a:hover { color: var(--cyan); }
             <span class="live-dot">LIVE</span>
           </div>
         </div>
-        <div class="bridge-list" id="bridge-list"></div>
+        <div class="bridge-list" id="bridge-list">
+          <div class="bridge-empty">No bridge operations yet. Bridge events will appear here when deposits or withdrawals occur.</div>
+        </div>
       </div>
 
     </div>
@@ -952,26 +1027,26 @@ footer a:hover { color: var(--cyan); }
     <div class="account-stats">
       <div class="as-item">
         <div class="as-label">Balance</div>
-        <div class="as-val" id="acct-balance"></div>
+        <div class="as-val" id="acct-balance">--</div>
       </div>
       <div class="as-item">
-        <div class="as-label">TX Count</div>
-        <div class="as-val" id="acct-txcount"></div>
+        <div class="as-label">Nonce</div>
+        <div class="as-val" id="acct-nonce">--</div>
       </div>
       <div class="as-item">
-        <div class="as-label">First Seen</div>
-        <div class="as-val" id="acct-firstseen"></div>
+        <div class="as-label">Flags</div>
+        <div class="as-val" id="acct-flags">--</div>
       </div>
     </div>
     <div class="account-tx-list">
-      <h4>Recent Transactions</h4>
+      <h4>Recent Transfers</h4>
       <div id="acct-txlist"></div>
     </div>
   </div>
 </div>
 
 <footer>
-  ZERO Network Explorer &middot; Devnet &middot; 3-validator network &middot;
+  ZERO Network Explorer &middot; Testnet &middot; 3-validator network &middot;
   <a href="https://zzero.net">zzero.net</a> &middot;
   <a href="https://docs.zzero.net">Docs</a> &middot;
   <a href="https://mcp.zzero.net">MCP</a> &middot;
@@ -984,241 +1059,298 @@ footer a:hover { color: var(--cyan); }
 (function() {
   'use strict';
 
-  // ── Utilities ──
-  const hex = () => Math.floor(Math.random() * 16).toString(16);
-  const hexStr = (n) => Array.from({length: n}, hex).join('');
-  const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
-  const randFloat = (a, b) => (Math.random() * (b - a) + a).toFixed(2);
-  const pick = (arr) => arr[randInt(0, arr.length - 1)];
-  const fmt = (n) => n.toLocaleString('en-US');
-
-  // ── State ──
-  let blockNum = 3847;
-  let epochNum = 1;
-  let totalTx = 8241;
-  let uptimeSeconds = 2 * 3600 + 14 * 60;
+  const fmt = (n) => Number(n).toLocaleString('en-US');
   const txList = document.getElementById('tx-list');
+  const txEmpty = document.getElementById('tx-empty');
   const MAX_TX = 50;
 
-  // ── Generate address ──
-  function genAddr() {
-    return 'zr_' + hexStr(40);
+  function truncHex(h, pre, suf) {
+    pre = pre || 8; suf = suf || 4;
+    if (!h || h.length <= pre + suf + 2) return h || '--';
+    return h.slice(0, pre) + '...' + h.slice(-suf);
   }
 
-  // Known addresses pool (for recurring appearances)
-  const addrPool = Array.from({length: 20}, genAddr);
-
-  function truncAddr(a) {
-    return a.slice(0, 7) + '...' + a.slice(-4);
+  function msToUptime(ms) {
+    const totalSec = Math.floor(parseInt(ms) / 1000);
+    const d = Math.floor(totalSec / 86400);
+    const h = Math.floor((totalSec % 86400) / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    return d + 'd ' + h + 'h ' + m + 'm';
   }
 
-  function truncHash(h) {
-    return h.slice(0, 9) + '...' + h.slice(-4);
+  // ── Status polling via WebSocket ──
+  let ws;
+  let wsReconnectTimer;
+  let latestStatus = null;
+
+  function connectWS() {
+    const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    ws = new WebSocket(proto + '//' + location.host + '/ws/transfers');
+
+    ws.onopen = () => {
+      const el = document.getElementById('ws-status');
+      el.textContent = 'LIVE';
+      el.className = 'meta ws-status connected';
+      document.getElementById('status-dot').classList.add('live');
+    };
+
+    ws.onclose = () => {
+      const el = document.getElementById('ws-status');
+      el.textContent = 'RECONNECTING';
+      el.className = 'meta ws-status disconnected';
+      document.getElementById('status-dot').classList.remove('live');
+      wsReconnectTimer = setTimeout(connectWS, 3000);
+    };
+
+    ws.onerror = () => {
+      ws.close();
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        if (msg.type === 'status') {
+          latestStatus = msg.data;
+          updateStatusUI(msg.data);
+        } else if (msg.type === 'transfer') {
+          addTransferToUI(msg.data);
+        } else if (msg.type === 'backlog') {
+          // Received backlog of recent transfers
+          msg.data.forEach(t => addTransferToUI(t, true));
+        }
+      } catch (e) { /* ignore parse errors */ }
+    };
   }
 
-  // ── Generate a transaction ──
-  function genTx() {
-    const hash = 'zr_' + hexStr(62);
-    const from = pick(addrPool);
-    const to = pick(addrPool.filter(a => a !== from));
-    // Max transaction: 25 Z ($0.25). Weighted toward small amounts.
-    const amounts = [0.01, 0.01, 0.02, 0.02, 0.03, 0.05, 0.05, 0.05, 0.10, 0.10,
-                     0.10, 0.15, 0.20, 0.25, 0.50, 0.50, 1.00, 1.00, 2.00, 3.00,
-                     5.00, 5.00, 10.00, 15.00, 20.00, 25.00];
-    const amount = pick(amounts);
-    return { hash, from, to, amount, fee: 0.01, time: Date.now() };
+  // Fallback: also poll via HTTP in case WS doesn't connect
+  async function pollStatus() {
+    try {
+      const resp = await fetch('/api/status');
+      const data = await resp.json();
+      latestStatus = data;
+      updateStatusUI(data);
+    } catch (e) { /* ignore */ }
   }
 
-  // ── Render transaction item ──
-  function renderTx(tx) {
-    const el = document.createElement('div');
-    el.className = 'tx-item';
+  // Poll every 10s as fallback (WS pushes every 5s when connected)
+  setInterval(pollStatus, 10000);
+  // Initial fetch
+  pollStatus();
+  connectWS();
 
-    const ago = Math.max(0, Math.floor((Date.now() - tx.time) / 1000));
-    const agoStr = ago < 60 ? ago + 's ago' : Math.floor(ago / 60) + 'm ago';
+  // ── Update UI from status data ──
+  function updateStatusUI(validators) {
+    if (!Array.isArray(validators) || validators.length === 0) return;
 
-    el.innerHTML = `
-      <span class="hash" data-hash="${tx.hash}" title="${tx.hash}">${truncHash(tx.hash)}</span>
-      <span class="addr" data-addr="${tx.from}" title="${tx.from}">${truncAddr(tx.from)}</span>
-      <span class="addr" data-addr="${tx.to}" title="${tx.to}">${truncAddr(tx.to)}</span>
-      <span class="amount">${tx.amount.toFixed(2)} Z</span>
-      <span class="fee">${tx.fee.toFixed(2)} Z</span>
-      <span class="time">${agoStr}</span>
-      <span class="status">&#10003;</span>
-    `;
-    return el;
-  }
+    const online = validators.filter(v => v.online);
+    const onlineCount = online.length;
 
-  // ── Add transaction to feed ──
-  function addTx() {
-    const tx = genTx();
-    const el = renderTx(tx);
-    txList.prepend(el);
-    totalTx++;
+    // Use the highest values across validators for aggregate stats
+    let maxRound = 0, maxEvents = 0, maxTxs = 0, maxAccounts = 0;
+    let totalSupply = 0, totalStake = 0, maxUptime = 0;
+    let totalPeers = 0, totalPending = 0, totalDust = 0;
+    let protocolReserve = 0, feePool = 0, bridgeReserve = 0;
 
-    // Remove old items
-    while (txList.children.length > MAX_TX) {
-      txList.removeChild(txList.lastChild);
-    }
+    online.forEach(v => {
+      const round = parseInt(v.dag_round) || 0;
+      const events = parseInt(v.finalized_events) || 0;
+      const txs = parseInt(v.finalized_txs) || 0;
+      const accounts = parseInt(v.account_count) || 0;
+      const supply = parseInt(v.total_supply) || 0;
+      const stake = parseInt(v.total_stake) || 0;
+      const uptime = parseInt(v.uptime_ms) || 0;
 
-    // Attach click handlers
-    el.querySelectorAll('.addr').forEach(a => {
-      a.addEventListener('click', () => showAccount(a.dataset.addr));
+      if (round > maxRound) maxRound = round;
+      if (events > maxEvents) maxEvents = events;
+      if (txs > maxTxs) maxTxs = txs;
+      if (accounts > maxAccounts) maxAccounts = accounts;
+      if (supply > totalSupply) totalSupply = supply;
+      if (stake > totalStake) totalStake = stake;
+      if (uptime > maxUptime) maxUptime = uptime;
+
+      totalPeers += parseInt(v.peer_count) || 0;
+      totalPending += parseInt(v.pending_transfers) || 0;
+      totalDust += parseInt(v.dust_candidates) || 0;
+      if (parseInt(v.protocol_reserve) > protocolReserve) protocolReserve = parseInt(v.protocol_reserve);
+      if (parseInt(v.fee_pool) > feePool) feePool = parseInt(v.fee_pool);
+      if (parseInt(v.bridge_reserve) > bridgeReserve) bridgeReserve = parseInt(v.bridge_reserve);
+    });
+
+    // Top bar
+    document.getElementById('block-counter').textContent = fmt(maxRound);
+    document.getElementById('epoch-counter').textContent = online.length > 0 ? online[0].current_epoch : '--';
+    document.getElementById('uptime').textContent = msToUptime(maxUptime);
+
+    // Stats grid
+    document.getElementById('stat-events').textContent = fmt(maxEvents);
+    document.getElementById('stat-round').textContent = fmt(maxRound);
+    document.getElementById('stat-accounts').textContent = fmt(maxAccounts);
+    document.getElementById('stat-supply').innerHTML = fmt(totalSupply) + '<span class="unit">Z</span>';
+    document.getElementById('stat-supply-sub').textContent = 'reserve: ' + fmt(protocolReserve) + ' Z';
+    document.getElementById('stat-txs').textContent = fmt(maxTxs);
+    document.getElementById('stat-validators').innerHTML = onlineCount + '<span class="unit">/ 3</span>';
+    document.getElementById('stat-validators-sub').textContent = onlineCount + ' online';
+    document.getElementById('stat-stake').innerHTML = fmt(totalStake) + '<span class="unit">Z</span>';
+
+    // Validators panel
+    renderValidators(validators);
+
+    // Network health panel
+    renderHealth(validators, {
+      maxRound, maxEvents, totalPeers, totalPending, totalDust,
+      feePool, bridgeReserve
     });
   }
 
-  // ── Initialize with some transactions ──
-  for (let i = 0; i < 20; i++) {
-    const tx = genTx();
-    tx.time = Date.now() - randInt(1000, 60000);
-    const el = renderTx(tx);
-    txList.appendChild(el);
-    el.querySelectorAll('.addr').forEach(a => {
-      a.addEventListener('click', () => showAccount(a.dataset.addr));
-    });
-  }
-
-  // ── Transaction feed interval (200-500ms) ──
-  function scheduleTx() {
-    setTimeout(() => {
-      addTx();
-      scheduleTx();
-    }, randInt(200, 500));
-  }
-  scheduleTx();
-
-  // ── Update counters ──
-  setInterval(() => {
-    blockNum += randInt(1, 3);
-    document.getElementById('block-counter').textContent = fmt(blockNum);
-  }, 2000);
-
-  setInterval(() => {
-    if (blockNum % 5000 < 3) epochNum++;
-    document.getElementById('epoch-counter').textContent = fmt(epochNum);
-  }, 15000);
-
-  setInterval(() => {
-    document.getElementById('stat-tx').textContent = fmt(totalTx);
-  }, 500);
-
-  // ── TPS fluctuation ──
-  let tps = 24;
-  setInterval(() => {
-    tps += randInt(-5, 7);
-    tps = Math.max(5, Math.min(85, tps));
-    document.getElementById('stat-tps').innerHTML = fmt(tps) + '<span class="unit">TPS</span>';
-  }, 1500);
-
-  // ── Finality fluctuation ──
-  setInterval(() => {
-    const f = randInt(180, 380);
-    document.getElementById('stat-finality').innerHTML = f + '<span class="unit">ms</span>';
-    document.getElementById('finality').textContent = f + 'ms';
-  }, 3000);
-
-  // ── Uptime ──
-  setInterval(() => {
-    uptimeSeconds++;
-    const d = Math.floor(uptimeSeconds / 86400);
-    const h = Math.floor((uptimeSeconds % 86400) / 3600);
-    const m = Math.floor((uptimeSeconds % 3600) / 60);
-    document.getElementById('uptime').textContent = d + 'd ' + h + 'h ' + m + 'm';
-  }, 1000);
-
-  // ── Validators ──
-  const validators = [];
-  for (let i = 0; i < 3; i++) {
-    validators.push({
-      id: 'zv_' + hexStr(12),
-      stake: randInt(5000, 15000),
-      uptime: (99 + Math.random() * 0.99).toFixed(2),
-      online: true,
-      trust: randInt(850, 1000),
-      earnings: randInt(10, 200)
-    });
-  }
-
-  function renderValidators() {
+  // ── Validators panel ──
+  function renderValidators(validators) {
     const list = document.getElementById('validator-list');
     list.innerHTML = '';
     validators.forEach(v => {
       const el = document.createElement('div');
       el.className = 'validator-item';
-      el.innerHTML = `
-        <span class="vid" title="${v.id}">${v.id.slice(0, 9)}...${v.id.slice(-3)}</span>
-        <span class="stake">${fmt(v.stake)} Z</span>
-        <span class="trust">${v.trust}/1000</span>
-        <span class="uptime">${v.uptime}%</span>
-        <span class="vstatus ${v.online ? 'online' : 'offline'}">${v.online ? 'ON' : 'OFF'}</span>
-      `;
+      const uptimeStr = v.online ? msToUptime(v.uptime_ms) : '--';
+      const stake = v.online ? fmt(parseInt(v.total_stake) || 0) : '--';
+      const peers = v.online ? (parseInt(v.peer_count) || 0) : 0;
+      el.innerHTML =
+        '<div><span class="vid">' + v.name + '</span><br><span class="vloc">' + v.location + '</span></div>' +
+        '<span class="stake">' + stake + ' Z</span>' +
+        '<span class="peers">' + peers + ' peers</span>' +
+        '<span class="uptime">' + uptimeStr + '</span>' +
+        '<span class="vstatus ' + (v.online ? 'online' : 'offline') + '">' + (v.online ? 'ON' : 'OFF') + '</span>';
       list.appendChild(el);
     });
   }
-  renderValidators();
 
-  // ── Validators fluctuation ──
-  setInterval(() => {
-    const v = pick(validators);
-    v.stake += randInt(-50, 100);
-    v.stake = Math.max(3000, v.stake);
-    v.trust = Math.max(800, Math.min(1000, v.trust + randInt(-2, 3)));
-    v.earnings += randInt(0, 3);
-    renderValidators();
-  }, 5000);
-
-  // ── Network Health ──
-  const healthMetrics = [
-    { label: 'DAG Depth', value: 47, max: 100, color: 'var(--green)' },
-    { label: 'Consensus Rounds', value: 3847, max: 5000, color: 'var(--cyan)' },
-    { label: 'Memory Usage', value: 23, max: 100, color: 'var(--green)', unit: '%' },
-    { label: 'Storage', value: 2, max: 100, color: 'var(--green)', unit: '%' },
-    { label: 'Connected Peers', value: 3, max: 10, color: 'var(--cyan)' },
-    { label: 'Msg Queue', value: 2, max: 100, color: 'var(--green)' },
-  ];
-
-  function renderHealth() {
+  // ── Network Health panel ──
+  function renderHealth(validators, agg) {
     const grid = document.getElementById('health-grid');
     grid.innerHTML = '';
-    healthMetrics.forEach(m => {
+
+    const online = validators.filter(v => v.online);
+    const avgPeers = online.length > 0 ? (agg.totalPeers / online.length).toFixed(1) : 0;
+
+    const metrics = [
+      { label: 'DAG Round', value: agg.maxRound, max: agg.maxRound + 100, color: 'var(--green)' },
+      { label: 'Finalized Events', value: agg.maxEvents, max: agg.maxEvents + 1000, color: 'var(--cyan)' },
+      { label: 'Avg Peers / Node', value: avgPeers, max: 10, color: 'var(--cyan)' },
+      { label: 'Pending Transfers', value: agg.totalPending, max: 100, color: agg.totalPending > 50 ? 'var(--amber)' : 'var(--green)' },
+      { label: 'Fee Pool', value: agg.feePool, max: Math.max(agg.feePool + 100, 1000), color: 'var(--green)', unit: ' Z' },
+      { label: 'Bridge Reserve', value: agg.bridgeReserve, max: Math.max(agg.bridgeReserve + 100, 1000), color: 'var(--cyan)', unit: ' Z' },
+    ];
+
+    metrics.forEach(m => {
       const pct = Math.min(100, (m.value / m.max) * 100);
-      const display = m.unit ? m.value + m.unit : fmt(m.value);
+      const display = fmt(m.value) + (m.unit || '');
       const el = document.createElement('div');
       el.className = 'health-item';
-      el.innerHTML = `
-        <span class="h-label">${m.label}</span>
-        <div class="h-bar-bg"><div class="h-bar" style="width:${pct}%;background:${m.color}"></div></div>
-        <span class="h-val">${display}</span>
-      `;
+      el.innerHTML =
+        '<span class="h-label">' + m.label + '</span>' +
+        '<div class="h-bar-bg"><div class="h-bar" style="width:' + pct + '%;background:' + m.color + '"></div></div>' +
+        '<span class="h-val">' + display + '</span>';
       grid.appendChild(el);
     });
   }
-  renderHealth();
 
-  setInterval(() => {
-    healthMetrics[0].value += randInt(-2, 3);
-    healthMetrics[0].value = Math.max(30, Math.min(99, healthMetrics[0].value));
-    healthMetrics[1].value += randInt(1, 5);
-    healthMetrics[2].value += randInt(-1, 2);
-    healthMetrics[2].value = Math.max(18, Math.min(35, healthMetrics[2].value));
-    healthMetrics[3].value += randInt(0, 1);
-    healthMetrics[3].value = Math.min(10, healthMetrics[3].value);
-    // Peers stay at 2-3 for devnet
-    healthMetrics[4].value = Math.max(2, Math.min(3, healthMetrics[4].value + randInt(-1, 1)));
-    healthMetrics[5].value += randInt(-2, 3);
-    healthMetrics[5].value = Math.max(0, Math.min(8, healthMetrics[5].value));
-    renderHealth();
-  }, 4000);
+  // ── Add transfer to TX list ──
+  function addTransferToUI(tx, isBacklog) {
+    if (txEmpty) txEmpty.style.display = 'none';
+
+    const el = document.createElement('div');
+    el.className = 'tx-item';
+
+    const hash = tx.tx_hash || '--';
+    const from = tx.from || '';
+    const to = tx.to || '';
+
+    el.innerHTML =
+      '<span class="hash" title="' + hash + '">' + truncHex(hash) + '</span>' +
+      '<span class="addr" data-addr="' + from + '" title="' + from + '">' + truncHex(from, 6, 4) + '</span>' +
+      '<span class="addr" data-addr="' + to + '" title="' + to + '">' + truncHex(to, 6, 4) + '</span>' +
+      '<span class="amount">' + fmt(tx.amount || 0) + ' Z</span>' +
+      '<span class="fee">' + (tx.nonce || 0) + '</span>' +
+      '<span class="time">#' + (tx.seq || 0) + '</span>' +
+      '<span class="status">&#10003;</span>';
+
+    if (isBacklog) {
+      txList.appendChild(el);
+    } else {
+      txList.prepend(el);
+    }
+
+    // Trim
+    while (txList.children.length > MAX_TX + 1) {
+      txList.removeChild(txList.lastChild);
+    }
+
+    // Click handlers
+    el.querySelectorAll('.addr').forEach(a => {
+      a.addEventListener('click', () => {
+        if (a.dataset.addr) showAccount(a.dataset.addr);
+      });
+    });
+  }
 
   // ── Search ──
   const searchInput = document.getElementById('search-input');
   const searchBtn = document.getElementById('search-btn');
   const searchResult = document.getElementById('search-result');
 
-  function doSearch() {
+  async function doSearch() {
     const q = searchInput.value.trim();
-    if (q.length > 0) {
+    if (q.length === 0) {
+      searchResult.style.display = 'none';
+      return;
+    }
+
+    // Validate hex format
+    if (!/^[0-9a-fA-F]{64}$/.test(q)) {
+      searchResult.className = 'search-result error';
       searchResult.style.display = 'block';
+      searchResult.innerHTML = 'Please enter a valid 64-character hex public key.';
+      return;
+    }
+
+    searchResult.className = 'search-result';
+    searchResult.style.display = 'block';
+    searchResult.innerHTML = 'Searching...';
+
+    try {
+      const [acctResp, histResp] = await Promise.all([
+        fetch('/api/account/' + q),
+        fetch('/api/history/' + q + '?limit=5'),
+      ]);
+
+      if (!acctResp.ok) throw new Error('Account not found');
+
+      const acct = await acctResp.json();
+      const hist = await histResp.json();
+
+      let html = '<div class="sr-addr">' + q + '</div>';
+      html += '<div class="sr-grid">';
+      html += '<div><div class="sr-label">Balance</div><div class="sr-val green">' + fmt(acct.balance || 0) + ' Z</div></div>';
+      html += '<div><div class="sr-label">Nonce</div><div class="sr-val">' + (acct.nonce || 0) + '</div></div>';
+      html += '<div><div class="sr-label">Flags</div><div class="sr-val">' + (acct.flags || '0') + '</div></div>';
+      html += '</div>';
+
+      if (hist.transfers && hist.transfers.length > 0) {
+        html += '<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">';
+        html += '<div class="sr-label">Recent Transfers</div>';
+        hist.transfers.forEach(t => {
+          html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:11px">';
+          html += '<span style="color:var(--cyan)">' + truncHex(t.tx_hash) + '</span>';
+          html += '<span style="color:var(--green)">' + fmt(t.amount) + ' Z</span>';
+          html += '</div>';
+        });
+        html += '</div>';
+      } else {
+        html += '<div style="margin-top:12px;color:var(--dim);font-size:11px">No transfer history for this account.</div>';
+      }
+
+      searchResult.innerHTML = html;
+    } catch (e) {
+      searchResult.className = 'search-result error';
+      searchResult.innerHTML = 'Error: ' + e.message;
     }
   }
 
@@ -1226,7 +1358,6 @@ footer a:hover { color: var(--cyan); }
   searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') doSearch();
   });
-
   searchInput.addEventListener('input', () => {
     if (searchInput.value.trim().length === 0) {
       searchResult.style.display = 'none';
@@ -1249,182 +1380,56 @@ footer a:hover { color: var(--cyan); }
     if (e.key === 'Escape') overlay.classList.remove('visible');
   });
 
-  function showAccount(addr) {
+  async function showAccount(addr) {
     document.getElementById('acct-addr').textContent = addr;
-    document.getElementById('acct-balance').textContent = fmt(randInt(100, 500000)) + ' Z';
-    document.getElementById('acct-txcount').textContent = fmt(randInt(10, 50000));
-
-    const days = randInt(1, 127);
-    document.getElementById('acct-firstseen').textContent = days + 'd ago';
-
-    const txListEl = document.getElementById('acct-txlist');
-    txListEl.innerHTML = '';
-    for (let i = 0; i < 8; i++) {
-      const tx = genTx();
-      const isIncoming = Math.random() > 0.5;
-      const item = document.createElement('div');
-      item.className = 'account-tx-item';
-      item.innerHTML = `
-        <span class="atx-hash">${truncHash(tx.hash)}</span>
-        <span class="atx-amount" style="color: ${isIncoming ? 'var(--green)' : 'var(--amber)'}">
-          ${isIncoming ? '+' : '-'}${tx.amount.toFixed(2)} Z
-        </span>
-        <span class="atx-time">${randInt(1, 120)}m ago</span>
-      `;
-      txListEl.appendChild(item);
-    }
-
+    document.getElementById('acct-balance').textContent = '...';
+    document.getElementById('acct-nonce').textContent = '...';
+    document.getElementById('acct-flags').textContent = '...';
+    document.getElementById('acct-txlist').innerHTML = '<div style="color:var(--dim);font-size:11px">Loading...</div>';
     overlay.classList.add('visible');
-  }
 
-  // ── Update time display for existing tx items ──
-  setInterval(() => {
-    txList.querySelectorAll('.tx-item .time').forEach(el => {
-      const text = el.textContent;
-      const match = text.match(/^(\d+)s ago$/);
-      if (match) {
-        const s = parseInt(match[1]) + 1;
-        el.textContent = s < 60 ? s + 's ago' : Math.floor(s / 60) + 'm ago';
+    try {
+      const [acctResp, histResp] = await Promise.all([
+        fetch('/api/account/' + addr),
+        fetch('/api/history/' + addr + '?limit=10'),
+      ]);
+
+      if (acctResp.ok) {
+        const acct = await acctResp.json();
+        document.getElementById('acct-balance').textContent = fmt(acct.balance || 0) + ' Z';
+        document.getElementById('acct-nonce').textContent = acct.nonce || 0;
+        document.getElementById('acct-flags').textContent = acct.flags || '0';
+      } else {
+        document.getElementById('acct-balance').textContent = 'Error';
       }
-    });
-  }, 1000);
 
-  // ── Bridge Events ──
-  const bridgeList = document.getElementById('bridge-list');
-  const MAX_BRIDGE = 20;
-  let bridgeVolume = 0;
-  let bridgeOps = 0;
-  const chains = ['Base', 'Arbitrum'];
-  const tokens = { 'Base': 'USDC', 'Arbitrum': 'USDT' };
+      if (histResp.ok) {
+        const hist = await histResp.json();
+        const txListEl = document.getElementById('acct-txlist');
+        txListEl.innerHTML = '';
 
-  // Bridge amounts: realistic deposit sizes (in Z, where 1 USDC = 100 Z)
-  const bridgeAmounts = [
-    100, 100, 200, 250, 500, 500, 1000, 1000,
-    2000, 2500, 5000, 5000, 10000, 15000, 25000
-  ];
-
-  function genBridgeEvent() {
-    const chain = pick(chains);
-    const token = tokens[chain];
-    const amount = pick(bridgeAmounts);
-    const amountZ = amount;
-    const amountUSD = (amount * 0.01).toFixed(2);
-    const recipient = pick(addrPool);
-    const sourceTx = '0x' + hexStr(64);
-    const bridgeId = 'zb_' + hexStr(16);
-    // Events come in pairs: deposit detected, then mint processed
-    // We'll show the combined event
-    const isDeposit = Math.random() > 0.3; // 70% deposits (mints), 30% will show as deposit detection
-    return {
-      type: isDeposit ? 'deposit' : 'mint',
-      chain,
-      token,
-      amount: amountZ,
-      amountUSD,
-      recipient,
-      sourceTx,
-      bridgeId,
-      time: Date.now(),
-      attestations: isDeposit ? randInt(0, 2) : (Math.random() > 0.1 ? 2 : 3),
-      status: isDeposit ? (Math.random() > 0.3 ? 'confirmed' : 'pending') : 'confirmed',
-    };
-  }
-
-  function renderBridgeEvent(evt) {
-    const el = document.createElement('div');
-    el.className = 'bridge-item';
-
-    const ago = Math.max(0, Math.floor((Date.now() - evt.time) / 1000));
-    const agoStr = ago < 60 ? ago + 's ago' : Math.floor(ago / 60) + 'm ago';
-
-    const typeLabel = evt.type === 'deposit' ? 'DEPOSIT' : 'MINT';
-    const typeClass = evt.type === 'deposit' ? 'deposit' : 'mint';
-    const statusClass = evt.status === 'confirmed' ? 'confirmed' : 'pending';
-    const statusLabel = evt.status === 'confirmed'
-      ? (evt.type === 'mint' ? 'MINTED' : 'CONFIRMED')
-      : 'PENDING';
-
-    el.innerHTML = `
-      <div class="bridge-row">
-        <span class="bridge-type ${typeClass}">${typeLabel}</span>
-        <span class="bridge-chain">${evt.chain} ${evt.token}</span>
-        <span class="bridge-amount">${fmt(evt.amount)} Z</span>
-      </div>
-      <div class="bridge-detail">
-        <span class="bridge-addr" data-addr="${evt.recipient}" title="${evt.recipient}">${truncAddr(evt.recipient)}</span>
-        <span class="bridge-status-badge ${statusClass}">${statusLabel} ${evt.attestations}/3</span>
-        <span class="bridge-time">${agoStr}</span>
-      </div>
-    `;
-
-    // Click handler for address
-    el.querySelectorAll('.bridge-addr').forEach(a => {
-      a.addEventListener('click', () => showAccount(a.dataset.addr));
-    });
-
-    return el;
-  }
-
-  function addBridgeEvent() {
-    const evt = genBridgeEvent();
-    const el = renderBridgeEvent(evt);
-    bridgeList.prepend(el);
-    bridgeOps++;
-
-    if (evt.status === 'confirmed') {
-      bridgeVolume += evt.amount;
-    }
-
-    // Remove old items
-    while (bridgeList.children.length > MAX_BRIDGE) {
-      bridgeList.removeChild(bridgeList.lastChild);
-    }
-
-    // Update stats
-    updateBridgeStats();
-  }
-
-  function updateBridgeStats() {
-    document.getElementById('stat-bridge').innerHTML = fmt(bridgeVolume) + '<span class="unit">Z</span>';
-    document.getElementById('stat-bridge-sub').textContent = bridgeOps + ' operations';
-  }
-
-  // Initialize with some bridge events
-  for (let i = 0; i < 6; i++) {
-    const evt = genBridgeEvent();
-    evt.time = Date.now() - randInt(30000, 600000);
-    evt.status = 'confirmed';
-    evt.attestations = Math.random() > 0.2 ? 2 : 3;
-    const el = renderBridgeEvent(evt);
-    bridgeList.appendChild(el);
-    bridgeOps++;
-    bridgeVolume += evt.amount;
-    el.querySelectorAll('.bridge-addr').forEach(a => {
-      a.addEventListener('click', () => showAccount(a.dataset.addr));
-    });
-  }
-  updateBridgeStats();
-
-  // New bridge event every 8-25 seconds (slower than transfers, realistic for bridge)
-  function scheduleBridgeEvent() {
-    setTimeout(() => {
-      addBridgeEvent();
-      scheduleBridgeEvent();
-    }, randInt(8000, 25000));
-  }
-  scheduleBridgeEvent();
-
-  // Update bridge event times
-  setInterval(() => {
-    bridgeList.querySelectorAll('.bridge-time').forEach(el => {
-      const text = el.textContent;
-      const match = text.match(/^(\d+)s ago$/);
-      if (match) {
-        const s = parseInt(match[1]) + 1;
-        el.textContent = s < 60 ? s + 's ago' : Math.floor(s / 60) + 'm ago';
+        if (hist.transfers && hist.transfers.length > 0) {
+          hist.transfers.forEach(t => {
+            const isIncoming = t.to === addr;
+            const item = document.createElement('div');
+            item.className = 'account-tx-item';
+            item.innerHTML =
+              '<span class="atx-hash">' + truncHex(t.tx_hash) + '</span>' +
+              '<span class="atx-dir">' + (isIncoming ? 'IN' : 'OUT') + '</span>' +
+              '<span class="atx-amount" style="color:' + (isIncoming ? 'var(--green)' : 'var(--amber)') + '">' +
+              (isIncoming ? '+' : '-') + fmt(t.amount) + ' Z</span>' +
+              '<span class="atx-time">seq #' + (t.seq || '?') + '</span>';
+            txListEl.appendChild(item);
+          });
+        } else {
+          txListEl.innerHTML = '<div style="color:var(--dim);font-size:11px">No transfer history.</div>';
+        }
       }
-    });
-  }, 1000);
+    } catch (e) {
+      document.getElementById('acct-balance').textContent = 'Error';
+      document.getElementById('acct-txlist').innerHTML = '<div style="color:#ff6666;font-size:11px">' + e.message + '</div>';
+    }
+  }
 
 })();
 </script>
